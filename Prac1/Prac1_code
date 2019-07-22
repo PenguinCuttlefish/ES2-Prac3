@@ -1,12 +1,9 @@
 #!/usr/bin/python3
 """
-Python Practical Template
-Keegan Crankshaw
-Readjust this Docstring as follows:
-Names: <names>
-Student Number: <studnum>
-Prac: <Prac Num>
-Date: <dd/mm/yyyy>
+Names: Vicky Feng
+Student Number: FNGVIC001
+Prac: 1
+Date: 22/07/2019
 """
 
 # import Relevant Librares
@@ -31,3 +28,4 @@ if __name__ == "__main__":
         GPIO.cleanup()
         print("Some other error occurred")
         print(e.message)
+
