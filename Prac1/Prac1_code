@@ -9,11 +9,29 @@ Date: 22/07/2019
 # import Relevant Librares
 import RPi.GPIO as GPIO
 
+light_on = False
+#set channel numbering system
+GPIO.setmode(GPIO.BCM)
+#set channels as inputs/outputs
+chan_out = [18]
+GPIO.setup(chan_out, GPIO.OUT)
+chan_in = [16]
+GPIO.setup(chan_in, GPIO.IN, pull_up_down = GPIO.PUD_UP)
+
 # Logic that you write
+def switch1(channel):
+    global light_on
+    print('Button pressed')
+    if light_on:
+      GPIO.output(18,0)
+    else:
+      GPIO.output(18,1)
+    
+    light_on = not light_on
+    
+GPIO.add_event_detect(16, GPIO.FALLING,callback = switch1, bouncetime = 100)    
 def main():
-    print("write your logic here")
-
-
+    a=1
 # Only run the functions if 
 if __name__ == "__main__":
     # Make sure the GPIO is stopped correctly
@@ -24,8 +42,8 @@ if __name__ == "__main__":
         print("Exiting gracefully")
         # Turn off your GPIOs here
         GPIO.cleanup()
-    except e:
+    except Exception as e:
         GPIO.cleanup()
         print("Some other error occurred")
-        print(e.message)
-
+        #print(e.message)
+        print(str(e))
