@@ -75,12 +75,20 @@ int main(void){
 	for (;;){
 		//Fetch the time from the RTC
 		//Write your logic here
-		
+		hours = wiringPiI2CReadReg8(RTC, HOUR);
+		mins = wiringPiI2CReadReg8(RTC, MIN);
+		secs = wiringPiI2CReadReg8(RTC, SEC);
 		//Function calls to toggle LEDs
 		//Write your logic here
 		
 		// Print out the time we have stored on our RTC
-		printf("The current time is: %x:%x:%x\n", hours, mins, secs);
+		if(mins < 10 && secs < 10){
+			printf("The current time is: %x:0%x:0%x\n", hours, mins, secs);
+		}else if( mins < 10){
+			printf("The current time is: %x:%0x:%x\n", hours, mins, secs);
+		}else if( secs < 10){
+			printf("The current time is: %x:%x:0%x\n", hours, mins, secs);
+		}
 
 		//using a delay to make our program "less CPU hungry"
 		delay(1000); //milliseconds
