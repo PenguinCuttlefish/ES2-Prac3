@@ -12,6 +12,7 @@
 #include <wiringPiI2C.h>
 #include <stdio.h> //For printf functions
 #include <stdlib.h> // For system functions
+#include <softPwm.h> // VF - for PWM on seconds LED
 
 #include "BinClock.h"
 #include "CurrentTime.h"
@@ -41,6 +42,8 @@ void initGPIO(void){
 	
 	//Set Up the Seconds LED for PWM
 	//Write your logic here
+	softPwmCreate(1, 0, 100); // VF - Sets WPi pin 1 as PWM and has range of 0% to 100% duty cycle
+	 
 	
 	printf("LEDS done\n");
 	
@@ -69,7 +72,7 @@ int main(void){
 	//You can comment this file out later
 	wiringPiI2CWriteReg8(RTC, HOUR, 0x13+TIMEZONE);
 	wiringPiI2CWriteReg8(RTC, MIN, 0x4);
-	wiringPiI2CWriteReg8(RTC, SEC, 0x00);
+	wiringPiI2CWriteReg8(RTC, SEC, 0x0);
 	
 	// Repeat this until we shut down
 	for (;;){
@@ -80,6 +83,7 @@ int main(void){
 		secs = wiringPiI2CReadReg8(RTC, SEC);
 		//Function calls to toggle LEDs
 		//Write your logic here
+		secPWM(secs); //calls function to change seconds LED brightness
 		
 		// Print out the time we have stored on our RTC
 		if(mins < 10 && secs < 10){
@@ -131,6 +135,8 @@ void lightMins(int units){
  */
 void secPWM(int units){
 	// Write your logic here
+	units = units*5/3;// VF - Changes seconds to duty cycle e.g 30 sec = 50% duty cycle
+	softPwmWrite(1, units);// VF - Changes LED brightness
 }
 
 /*
