@@ -73,10 +73,10 @@ int main(void){
 
 	//Set random time (3:04PM)
 	//You can comment this file out later
-	//wiringPiI2CWriteReg8(RTC, HOUR, 0x10+TIMEZONE);
-	//wiringPiI2CWriteReg8(RTC, MIN, 0x59);
-	//wiringPiI2CWriteReg8(RTC, SEC, 0b11010000);
-	toggleTime();
+	wiringPiI2CWriteReg8(RTC, HOUR, 0x10+TIMEZONE);
+	wiringPiI2CWriteReg8(RTC, MIN, 0x59);
+	wiringPiI2CWriteReg8(RTC, SEC, 0b10000000);
+	///toggleTime();
 	// Repeat this until we shut down
 	for (;;){
 		//Fetch the time from the RTC
@@ -168,6 +168,8 @@ void lightMins(int units){
  */
 void secPWM(int units){
 	// Write your logic here
+	units = hexCompensation(units);
+	units = units*5/3;
 	softPwmWrite (1, units);
 }
 
@@ -238,7 +240,7 @@ void hourInc(void){
 	long interruptTime = millis();
 
 	if (interruptTime - lastInterruptTime>200){
-		//printf("Interrupt 1 triggered, %x\n", hours);
+		printf("Interrupt 1 triggered, %x\n", hours);
 		//Fetch RTC Time
 		hours = wiringPiI2CReadReg8(RTC, HOUR);
 		hours = hexCompensation(hours); 
@@ -262,7 +264,7 @@ void minInc(void){
 	long interruptTime = millis();
 
 	if (interruptTime - lastInterruptTime>200){
-		//printf("Interrupt 2 triggered, %x\n", mins);
+		printf("Interrupt 2 triggered, %x\n", mins);
 		//Fetch RTC Time
 		mins = wiringPiI2CReadReg8(RTC, MIN);
 		mins = hexCompensation(mins);
